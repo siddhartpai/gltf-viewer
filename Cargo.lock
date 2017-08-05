@@ -7,7 +7,7 @@ dependencies = [
  "futures 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-cpupool 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "gl 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "gltf 0.7.0 (git+https://github.com/alteous/gltf?branch=incoming)",
+ "gltf 0.7.0 (git+https://github.com/alteous/gltf?branch=mikk-tspace)",
  "glutin 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "image 0.14.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "reqwest 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -364,7 +364,7 @@ dependencies = [
 [[package]]
 name = "gltf"
 version = "0.7.0"
-source = "git+https://github.com/alteous/gltf?branch=incoming#44f52b7f983612eb03262f45b8fc583d3eeda1f5"
+source = "git+https://github.com/alteous/gltf?branch=mikk-tspace#c8ef89f5644ec56a60f389954f6636a0edeb7030"
 dependencies = [
  "base64 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1370,6 +1370,10 @@ dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
+[[patch.unused]]
+name = "gltf"
+version = "0.7.0"
+
 [metadata]
 "checksum adler32 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3ff33fe13a08dbce05bcefa2c68eea4844941437e33d6f808240b54d7157b9cd"
 "checksum advapi32-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "e06588080cb19d0acb6739808aafa5f26bfb2ca015b2b6370028b44cf7cb8a9a"
@@ -1416,7 +1420,7 @@ dependencies = [
 "checksum gl 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)" = "97543cffb3e39377ecb7156651d906f8284f459a460aef973936412364a4202b"
 "checksum gl_generator 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)" = "e7acbf2ba3d52e9e1ad96a84362129e9c1aa0af55ebfc86a91004e1b83eca61c"
 "checksum gleam 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)" = "bf887141f0c2a83eae026cbf3fba74f0a5cb0f01d20e5cdfcd8c4ad39295be1e"
-"checksum gltf 0.7.0 (git+https://github.com/alteous/gltf?branch=incoming)" = "<none>"
+"checksum gltf 0.7.0 (git+https://github.com/alteous/gltf?branch=mikk-tspace)" = "<none>"
 "checksum gltf-derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fb938e5a964ecbc5633e5d62cbf2c788de43ab5dd121a0bb1c8e6075aefde8ac"
 "checksum glutin 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)" = "3cee1543cf7efce742534d31c024d8dd1aa0e8944d36ebdd7dfccdb80b84700d"
 "checksum httparse 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "af2f2dd97457e8fb1ae7c5a420db346af389926e36f43768b96f101546b04a07"

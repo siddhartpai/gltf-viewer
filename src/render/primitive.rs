@@ -5,7 +5,7 @@ use std::rc::Rc;
 
 use gl;
 use gltf;
-use gltf::mesh::{ Indices, TexCoords, Colors };
+use gltf::mesh::{ Colors };
 use gltf::json::mesh::Mode;
 
 use render::math::*;
@@ -111,7 +111,7 @@ impl Primitive {
 
         // texture coordinates
         let mut tex_coord_set = 0;
-        while let Some(tex_coords) = g_primitive.tex_coords(tex_coord_set) {
+        while let Some(tex_coords) = g_primitive.tex_coords_f32(tex_coord_set) {
             if tex_coord_set > 1 {
                 println!("WARNING: Ignoring texture coordinate set {}, \
                           only supporting 2 sets at the moment. (mesh: {}, primitive: {})",
@@ -119,12 +119,6 @@ impl Primitive {
                 tex_coord_set += 1;
                 continue;
             }
-            let tex_coords = match tex_coords {
-                TexCoords::F32(tc) => tc,
-                // TODO! TexCoords::U8/U16
-                TexCoords::U8(_) => unimplemented!(),
-                TexCoords::U16(_) => unimplemented!(),
-            };
             for (i, tex_coord) in tex_coords.enumerate() {
                 match tex_coord_set {
                     0 => vertices[i].tex_coord_0 = Vector2::from(tex_coord),
@@ -161,15 +155,7 @@ impl Primitive {
             color_set += 1;
         }
 
-        let mut indices: Option<Vec<u32>> = None;
-        if let Some(g_indices) = g_primitive.indices() {
-            // convert indices to u32 if necessary
-            indices = Some(match g_indices {
-                Indices::U8(indices) => indices.map(|i| i as u32).collect(),
-                Indices::U16(indices) => indices.map(|i| i as u32).collect(),
-                Indices::U32(indices) => indices.collect(),
-            });
-        }
+        let indices: Option<Vec<u32>> = g_primitive.indices_u32().map(|indices| indices.collect());
 
         assert_eq!(g_primitive.mode(), Mode::Triangles, "not yet implemented: primitive mode must be Triangles.");
 

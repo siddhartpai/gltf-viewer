@@ -35,8 +35,12 @@ reqwest = "0.7.2"
 [dependencies.gltf]
 # version = "0.7.0"
 git = "https://github.com/alteous/gltf"
-branch = "incoming"
+branch = "mikk-tspace"
 features = ["names"]
 
-# [patch.crates-io]
-# gltf = { path = "../gltf"}
+[patch.crates-io]
+gltf = { path = "../gltf"}
+
+# [profile.dev]
+# opt-level = 2
+# debug = false
