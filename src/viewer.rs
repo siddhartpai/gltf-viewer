@@ -282,7 +282,7 @@ impl GltfViewer {
 
             self.orbit_controls.frame_update(self.delta_time); // keyboard navigation
 
-            self.draw(self::rgb::RGBA::new(0.4,0.2,0.1,1.0));
+            self.draw(self::rgb::RGBA::new(0.1, 0.2, 0.3, 1.0));
 
             self.gl_window.as_ref().unwrap().swap_buffers().unwrap();
         }
@@ -296,7 +296,6 @@ impl GltfViewer {
 
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
             gl::ClearColor(bg_color.r as f32, bg_color.g as f32, bg_color.b as f32, bg_color.a as f32);
-
             let cam_params = self.orbit_controls.camera_params();
             self.scene.draw(&mut self.root, &cam_params);
 
@@ -354,6 +353,9 @@ impl GltfViewer {
         let min_angle : f32 = 0.0 ;
         let max_angle : f32 =  2.0 * PI ;
         let increment_angle : f32 = ((max_angle - min_angle)/(count as f32)) as f32;
+        unsafe{
+            gl::ClearColor(bg_color.r, bg_color.g, bg_color.b, bg_color.a);        
+        }
         for i in 1..(count+1) {
             self.orbit_controls.rotate_object(increment_angle);
             let dot = filename.rfind('.').unwrap_or_else(|| filename.len());
