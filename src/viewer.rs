@@ -134,7 +134,6 @@ impl GltfViewer {
         unsafe {
             print_context_info();
 
-            gl::ClearColor(0.0, 1.0, 0.0, 1.0); // green for debugging
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
 
             if headless || !visible {
@@ -235,12 +234,7 @@ impl GltfViewer {
         }
         let base_path = Path::new(source);
         let mut root = Root::from_gltf(&gltf, &buffers, base_path);
-<<<<<<< HEAD
         let scene = Scene::from_gltf(&gltf.scenes().nth(0).unwrap(), &mut root);
-=======
-        let scene = Scene::from_gltf(gltf.scenes().nth(0).unwrap(), &mut root);
-        // println!("{:?}",scene);
->>>>>>> Addedd dominant color handling
         print_elapsed(&format!("Loaded scene with {} nodes, {} meshes in ",
         gltf.nodes().count(), root.meshes.len()), &start_time);
 
@@ -308,7 +302,7 @@ impl GltfViewer {
             self.render_timer.end();
         }
     }
-    fn find_color(&mut self, t: image::ColorType) -> ColorFormat {
+    fn find_color_type(&mut self, t: image::ColorType) -> ColorFormat {
         match t {
             image::ColorType::RGB(8) => ColorFormat::Rgb,
             image::ColorType::RGBA(8) => ColorFormat::Rgba,
@@ -316,7 +310,7 @@ impl GltfViewer {
         }
     }
 
-    pub fn screenshot(&mut self, filename: &str, _width: u32, _height: u32) {
+    pub fn screenshot(&mut self, filename: &str, width: u32, height: u32) {
         self.draw();
 
         let mut img = DynamicImage::new_rgba8(width, height);
@@ -330,8 +324,8 @@ impl GltfViewer {
 
         let img = img.flipv();
 
-        let color_type = self.find_color(img.color());
-        let colors = color_thief::get_palette(&img.raw_pixels(), color_type, 10, 10).unwrap();
+        let color_type = self.find_color_type(img.color());
+        let colors = color_thief::get_palette(&img.raw_pixels(), color_type, 1, 2).unwrap();
         println!("{:?}",colors);
         let mut file = File::create(filename).unwrap();
         if let Err(err) = img.save(&mut file, ImageFormat::PNG) {
