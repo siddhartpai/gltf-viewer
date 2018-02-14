@@ -18,6 +18,7 @@ extern crate gltf_utils;
 
 extern crate image;
 extern crate num_traits;
+extern crate rgb;
 
 #[macro_use]
 extern crate bitflags;
@@ -28,6 +29,9 @@ use clap::{Arg, App, AppSettings};
 extern crate simplelog;
 use simplelog::{TermLogger, LevelFilter, Config as LogConfig};
 
+extern crate palette;
+use palette::{Rgb, Lch, Hue};
+use palette::pixel::Srgb;
 mod utils;
 mod viewer;
 use viewer::{GltfViewer, CameraOptions};
@@ -144,10 +148,17 @@ pub fn main() {
         if !filename.to_lowercase().ends_with(".png") {
             warn!("filename should end with .png");
         }
+        let dominant_color: self::rgb::RGB<u8> = viewer.get_prominent_color( width, height);
+        let lch_color: Lch = Rgb::from(Srgb::new((dominant_color.r as f32)/255.0,(dominant_color.g as f32)/255.0,(dominant_color.b as f32)/255.0)).into();
+        let new_color: Rgb = lch_color.shift_hue(180.0.into()).into();
+        let alpha_color = self::rgb::RGBA::new(new_color.red,new_color.green,new_color.blue,0.0);
+
+        println!("dominant_color : :{:?} lch_color : {:?} ,  hueshifted : {:?}",dominant_color,lch_color,new_color);
         if count > 1 {
-            viewer.multiscreenshot(filename, width, height, count)
+            println!("{:?}",dominant_color);
+            viewer.multiscreenshot(filename, width, height, count, alpha_color);
         } else {
-            viewer.screenshot(filename, width, height)
+            viewer.screenshot(filename, width, height, alpha_color);
         }
         return;
     }

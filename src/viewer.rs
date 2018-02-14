@@ -4,7 +4,6 @@ use std::os::raw::c_void;
 use std::path::Path;
 use std::process;
 use std::time::Instant;
-
 use cgmath::{ Point3 };
 use collision::Aabb;
 use gl;
@@ -35,7 +34,8 @@ use utils::{print_elapsed, FrameTimer, gl_check_error, print_context_info};
 
 extern crate color_thief;
 extern crate image;
-use self::color_thief::{ColorFormat};
+use self::color_thief::{ ColorFormat};
+extern crate rgb;
 
 // TODO!: complete and pass through draw calls? or get rid of multiple shaders?
 // How about state ordering anyway?
@@ -282,19 +282,20 @@ impl GltfViewer {
 
             self.orbit_controls.frame_update(self.delta_time); // keyboard navigation
 
-            self.draw();
+            self.draw(self::rgb::RGBA::new(0.4,0.2,0.1,1.0));
 
             self.gl_window.as_ref().unwrap().swap_buffers().unwrap();
         }
     }
 
     // Returns whether to keep running
-    pub fn draw(&mut self) {
+    pub fn draw(&mut self, bg_color: self::rgb::RGBA<f32>) {
         // render
         unsafe {
             self.render_timer.start();
 
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+            gl::ClearColor(bg_color.r as f32, bg_color.g as f32, bg_color.b as f32, bg_color.a as f32);
 
             let cam_params = self.orbit_controls.camera_params();
             self.scene.draw(&mut self.root, &cam_params);
@@ -310,9 +311,30 @@ impl GltfViewer {
         }
     }
 
-    pub fn screenshot(&mut self, filename: &str, width: u32, height: u32) {
-        self.draw();
+    pub fn screenshot(&mut self, filename: &str, width: u32, height: u32, bg_color: self::rgb::RGBA<f32>) {
+        self.draw(bg_color);
 
+        let mut img = DynamicImage::new_rgba8(width, height);
+        unsafe {
+            let pixels = img.as_mut_rgba8().unwrap();
+            gl::PixelStorei(gl::PACK_ALIGNMENT, 1);
+            gl::ReadPixels(0, 0, width as i32, height as i32, gl::RGBA,
+                gl::UNSIGNED_BYTE, pixels.as_mut_ptr() as *mut c_void);
+            gl_check_error!();
+        }
+
+        let img = img.flipv();
+        let mut file = File::create(filename).unwrap();
+        if let Err(err) = img.save(&mut file, ImageFormat::PNG) {
+            error!("{}", err);
+        }
+        else {
+            println!("Saved {}x{} screenshot to {}", width, height, filename);
+        }
+    }
+    pub fn get_prominent_color (&mut self, width: u32, height: u32) -> self::rgb::RGB<u8> {
+        self.draw(self::rgb::RGBA::new(0.0,0.0,0.0,0.0));
+        
         let mut img = DynamicImage::new_rgba8(width, height);
         unsafe {
             let pixels = img.as_mut_rgba8().unwrap();
@@ -326,16 +348,9 @@ impl GltfViewer {
 
         let color_type = self.find_color_type(img.color());
         let colors = color_thief::get_palette(&img.raw_pixels(), color_type, 1, 2).unwrap();
-        println!("{:?}",colors);
-        let mut file = File::create(filename).unwrap();
-        if let Err(err) = img.save(&mut file, ImageFormat::PNG) {
-            error!("{}", err);
-        }
-        else {
-            println!("Saved {}x{} screenshot to {}", width, height, filename);
-        }
+        colors[1]
     }
-    pub fn multiscreenshot(&mut self, filename: &str, width: u32, height: u32, count: u32) {
+    pub fn multiscreenshot(&mut self, filename: &str, width: u32, height: u32, count: u32,bg_color: self::rgb::RGBA<f32>) {
         let min_angle : f32 = 0.0 ;
         let max_angle : f32 =  2.0 * PI ;
         let increment_angle : f32 = ((max_angle - min_angle)/(count as f32)) as f32;
@@ -344,7 +359,7 @@ impl GltfViewer {
             let dot = filename.rfind('.').unwrap_or_else(|| filename.len());
             let mut actual_name = filename.to_string();
             actual_name.insert_str(dot, &format!("_{}", i));
-            self.screenshot(&actual_name[..], width,height);
+            self.screenshot(&actual_name[..], width,height, bg_color);
         }
     }
 }
