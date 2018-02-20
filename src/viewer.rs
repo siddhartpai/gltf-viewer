@@ -351,7 +351,7 @@ impl GltfViewer {
     }
     pub fn multiscreenshot(&mut self, filename: &str, width: u32, height: u32, count: u32,bg_color: self::rgb::RGBA<f32>) {
         let min_angle : f32 = 0.0 ;
-        let max_angle : f32 =  2.0 * PI ;
+        let max_angle : f32 =  PI/2.0 ;
         let increment_angle : f32 = ((max_angle - min_angle)/(count as f32)) as f32;
         unsafe{
             gl::ClearColor(bg_color.r, bg_color.g, bg_color.b, bg_color.a);        
