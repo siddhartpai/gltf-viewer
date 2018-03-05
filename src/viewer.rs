@@ -250,9 +250,9 @@ impl GltfViewer {
         let _max_distance = size * 10.0;
         // TODO: x,y addition optional, z optionally minus instead
         let cam_pos = Point3::new(
-            center.x + size / 2.0,
+            center.x + size / 2.3,
             center.y + size / 5.0,
-            center.z + size / 2.0,
+            center.z + size / 2.3,
         );
         let _near = size / 100.0;
         let _far = size * 100.0;
@@ -351,7 +351,7 @@ impl GltfViewer {
     }
     pub fn multiscreenshot(&mut self, filename: &str, width: u32, height: u32, count: u32,bg_color: self::rgb::RGBA<f32>) {
         let min_angle : f32 = 0.0 ;
-        let max_angle : f32 =  PI/2.0 ;
+        let max_angle : f32 =   PI / 2.0 ;
         let increment_angle : f32 = ((max_angle - min_angle)/(count as f32)) as f32;
         unsafe{
             gl::ClearColor(bg_color.r, bg_color.g, bg_color.b, bg_color.a);        
