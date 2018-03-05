@@ -151,7 +151,7 @@ pub fn main() {
         let dominant_color: self::rgb::RGB<u8> = viewer.get_prominent_color( width, height);
         let lch_color: Lch = Rgb::from(Srgb::new((dominant_color.r as f32)/255.0,(dominant_color.g as f32)/255.0,(dominant_color.b as f32)/255.0)).into();
         let new_color: Rgb = lch_color.shift_hue(180.0.into()).into();
-        let alpha_color = self::rgb::RGBA::new(new_color.red,new_color.green,new_color.blue,1.0);
+        let alpha_color = self::rgb::RGBA::new(new_color.red,new_color.green,new_color.blue,0.0);
 
         println!("dominant_color : :{:?} lch_color : {:?} ,  alphahueshifted : {:?}",dominant_color,lch_color,alpha_color);
         if count > 1 {
