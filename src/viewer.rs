@@ -295,7 +295,7 @@ impl GltfViewer {
             self.render_timer.start();
 
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
-            gl::ClearColor(bg_color.r as f32, bg_color.g as f32, bg_color.b as f32, bg_color.a as f32);
+            gl::ClearColor(bg_color.r as f32, bg_color.g as f32, bg_color.b as f32, 0.0);
             let cam_params = self.orbit_controls.camera_params();
             self.scene.draw(&mut self.root, &cam_params);
 
