@@ -313,10 +313,10 @@ impl PbrShader {
 
             shader.set_vec3(uniforms.u_LightColor, 5.0, 5.0, 5.0);
             // TODO!: optional minus on z
-            shader.set_vec3(uniforms.u_LightDirection, 0.0, 0.5, 0.5);
+            shader.set_vec3(uniforms.u_LightDirection, 0.0, 2.0, 0.5);
 
             shader.set_vec3(uniforms.u_AmbientLightColor, 1.0, 1.0, 1.0);
-            shader.set_float(uniforms.u_AmbientLightIntensity, 0.2);
+            shader.set_float(uniforms.u_AmbientLightIntensity, 0.8);
 
             uniforms
         };
